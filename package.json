@@ -1,0 +1,13 @@
+{
+  "name": "website-roaster",
+  "version": "1.0.0",
+  "description": "A viral lead-gen tool that roasts websites",
+  "main": "index.html",
+  "scripts": {
+    "dev": "python3 -m http.server 8000",
+    "preview": "open http://localhost:8000"
+  },
+  "keywords": ["website", "roast", "lead-gen", "viral", "design", "review"],
+  "author": "Website Factory",
+  "license": "MIT"
+}

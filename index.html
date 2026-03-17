@@ -1,0 +1,2619 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Website Roaster 🔥 - Get Your Site Roasted</title>
+    
+    <!-- Social Media Meta Tags -->
+    <meta property="og:title" content="Website Roaster 🔥 - Get Your Site Brutally Reviewed">
+    <meta property="og:description" content="Paste your URL. Get roasted. Get better. Real PageSpeed analysis with brutal honesty.">
+    <meta property="og:url" content="https://website-roaster.vercel.app">
+    <meta property="og:type" content="website">
+    
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Website Roaster 🔥">
+    <meta name="twitter:description" content="Get your website brutally reviewed with real performance data">
+    
+    <meta name="description" content="Get your website brutally reviewed for free. Real Google PageSpeed analysis with entertaining roasts.">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&family=DM+Serif+Display:wght@400&family=DM+Sans:wght@400;500;600&family=Playfair+Display:wght@400;600;700&family=Cormorant+Garamond:wght@400;600&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-primary: #0a0a0a;
+            --bg-secondary: #1a1a1a;
+            --bg-card: #1f1f1f;
+            --text-primary: #ffffff;
+            --text-secondary: #a1a1aa;
+            --text-muted: #71717a;
+            --accent-red: #ff4444;
+            --accent-orange: #ff8800;
+            --accent-green: #22c55e;
+            --accent-neon: #00ff88;
+            --accent-blue: #3b82f6;
+            --accent-purple: #a855f7;
+            --accent-gold: #fbbf24;
+            --border: #333333;
+            --shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+        }
+        
+        /* Page Management */
+        .page {
+            display: none;
+        }
+        
+        .page.active {
+            display: block;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        
+        .title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, var(--accent-red), var(--accent-orange));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .subtitle {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+        }
+        
+        .input-section {
+            background: var(--bg-card);
+            border: 2px solid var(--border);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 3rem;
+            box-shadow: var(--shadow);
+        }
+        
+        .url-input-container {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+        
+        .url-input {
+            flex: 1;
+            background: var(--bg-secondary);
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            padding: 1rem 1.5rem;
+            font-size: 1.1rem;
+            color: var(--text-primary);
+            outline: none;
+            transition: all 0.3s ease;
+        }
+        
+        .url-input:focus {
+            border-color: var(--accent-red);
+            box-shadow: 0 0 0 3px rgba(255, 68, 68, 0.1);
+        }
+        
+        .roast-btn {
+            background: linear-gradient(135deg, var(--accent-red), var(--accent-orange));
+            border: none;
+            border-radius: 12px;
+            padding: 1rem 2rem;
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 600;
+            font-size: 1.1rem;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+        
+        .roast-btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(255, 68, 68, 0.3);
+        }
+        
+        .roast-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .example-text {
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+        
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 3rem;
+            background: var(--bg-card);
+            border-radius: 16px;
+            margin-bottom: 2rem;
+            border: 2px solid var(--border);
+        }
+        
+        .loading.show {
+            display: block;
+        }
+        
+        .loading-spinner {
+            width: 60px;
+            height: 60px;
+            margin: 0 auto 2rem;
+            border: 3px solid var(--border);
+            border-top: 3px solid var(--accent-red);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .loading-text {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: var(--bg-secondary);
+            border-radius: 4px;
+            overflow: hidden;
+            margin: 1rem 0;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent-red), var(--accent-orange));
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+        
+        .loading-steps {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-top: 1rem;
+        }
+        
+        .strategy-toggle {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        
+        .strategy-btn {
+            background: var(--bg-secondary);
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            padding: 0.5rem 1rem;
+            color: var(--text-primary);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+        
+        .strategy-btn.active {
+            background: linear-gradient(135deg, var(--accent-red), var(--accent-orange));
+            border-color: transparent;
+            color: white;
+        }
+        
+        .results {
+            display: none;
+            background: var(--bg-card);
+            border: 2px solid var(--border);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 3rem;
+            box-shadow: var(--shadow);
+        }
+        
+        .results.show {
+            display: block;
+        }
+        
+        .results-header {
+            text-align: center;
+            margin-bottom: 2rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .roasted-url {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            word-break: break-all;
+        }
+        
+        .overall-verdict {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+        }
+        
+        .scores-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .score-card {
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
+            border: 2px solid var(--border);
+            transition: transform 0.3s ease;
+        }
+        
+        .score-card:hover {
+            transform: translateY(-4px);
+        }
+        
+        .score-number {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            animation: countUp 1s ease-out;
+        }
+        
+        @keyframes countUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .score-label {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .score-comment {
+            font-size: 0.95rem;
+            color: var(--text-primary);
+            font-style: italic;
+        }
+        
+        .score-bad { color: var(--accent-red); }
+        .score-okay { color: var(--accent-orange); }
+        .score-good { color: var(--accent-green); }
+        
+        .core-vitals {
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .core-vitals h3 {
+            font-family: 'Space Grotesk', sans-serif;
+            margin-bottom: 1rem;
+            color: var(--accent-orange);
+        }
+        
+        .vital-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .vital-item:last-child {
+            border-bottom: none;
+        }
+        
+        .vital-status {
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        
+        .vital-pass { background: var(--accent-green); color: var(--bg-primary); }
+        .vital-fail { background: var(--accent-red); color: white; }
+        .vital-warning { background: var(--accent-orange); color: var(--bg-primary); }
+        
+        .detailed-roast {
+            margin-bottom: 2rem;
+        }
+        
+        .detailed-roast h3 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--accent-red);
+        }
+        
+        .roast-text {
+            font-size: 1.1rem;
+            line-height: 1.7;
+            margin-bottom: 1rem;
+        }
+        
+        .recommendations {
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .recommendations h3 {
+            font-family: 'Space Grotesk', sans-serif;
+            margin-bottom: 1rem;
+            color: var(--accent-neon);
+        }
+        
+        .recommendation-item {
+            padding: 0.5rem 0;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .recommendation-item:last-child {
+            border-bottom: none;
+        }
+        
+        .ctas {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+        
+        .cta-btn {
+            flex: 1;
+            min-width: 200px;
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            text-decoration: none;
+            text-align: center;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            font-family: 'Inter', sans-serif;
+        }
+        
+        .cta-primary {
+            background: linear-gradient(135deg, var(--accent-green), var(--accent-neon));
+            color: var(--bg-primary);
+        }
+        
+        .cta-secondary {
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            border: 2px solid var(--border);
+        }
+        
+        .cta-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+        
+        .share-section {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border);
+        }
+        
+        .share-btn {
+            background: var(--bg-secondary);
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            padding: 1rem 2rem;
+            color: var(--text-primary);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .share-btn:hover {
+            border-color: var(--accent-red);
+            transform: translateY(-2px);
+        }
+        
+        .error-section {
+            display: none;
+            background: var(--bg-card);
+            border: 2px solid var(--accent-red);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+        
+        .error-section.show {
+            display: block;
+        }
+        
+        .error-emoji {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+        
+        .error-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.5rem;
+            color: var(--accent-red);
+            margin-bottom: 1rem;
+        }
+        
+        .error-message {
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+        }
+        
+        .back-btn {
+            background: var(--bg-secondary);
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            padding: 0.75rem 1.5rem;
+            color: var(--text-primary);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            margin-bottom: 2rem;
+        }
+        
+        .back-btn:hover {
+            border-color: var(--accent-red);
+            transform: translateY(-1px);
+        }
+        
+        .footer {
+            text-align: center;
+            color: var(--text-muted);
+            padding: 2rem 0;
+            border-top: 1px solid var(--border);
+            margin-top: 4rem;
+        }
+        
+        /* ===== NEW WEBSITE FACTORY STYLES ===== */
+        
+        /* Vibe Selection Screen */
+        .factory-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 4rem;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, var(--accent-green), var(--accent-neon));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .factory-subtitle {
+            font-size: 1.5rem;
+            color: var(--text-secondary);
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        
+        .vibe-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+            max-width: 1000px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .vibe-card {
+            background: var(--bg-card);
+            border: 3px solid var(--border);
+            border-radius: 20px;
+            padding: 2rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            min-height: 200px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .vibe-card:hover {
+            transform: translateY(-8px);
+            border-color: var(--accent-green);
+            box-shadow: 0 20px 60px rgba(34, 197, 94, 0.2);
+        }
+        
+        .vibe-card.selected {
+            border-color: var(--accent-green);
+            background: linear-gradient(135deg, rgba(34, 197, 94, 0.1), rgba(0, 255, 136, 0.1));
+            box-shadow: 0 20px 60px rgba(34, 197, 94, 0.3);
+        }
+        
+        .vibe-emoji {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            display: block;
+        }
+        
+        .vibe-name {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+        
+        .vibe-description {
+            color: var(--text-secondary);
+            font-size: 1rem;
+            font-weight: 500;
+        }
+        
+        .next-btn {
+            background: linear-gradient(135deg, var(--accent-green), var(--accent-neon));
+            border: none;
+            border-radius: 12px;
+            padding: 1.25rem 3rem;
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 600;
+            font-size: 1.2rem;
+            color: var(--bg-primary);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 2rem auto;
+            display: block;
+            opacity: 0.5;
+            pointer-events: none;
+        }
+        
+        .next-btn.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+        
+        .next-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 40px rgba(34, 197, 94, 0.4);
+        }
+        
+        /* Quick Info Screen */
+        .quick-form {
+            background: var(--bg-card);
+            border: 2px solid var(--border);
+            border-radius: 20px;
+            padding: 3rem;
+            margin-bottom: 3rem;
+            box-shadow: var(--shadow);
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .form-group {
+            margin-bottom: 2rem;
+        }
+        
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+            color: var(--text-primary);
+            font-size: 1.1rem;
+        }
+        
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            background: var(--bg-secondary);
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            padding: 1.25rem 1.5rem;
+            color: var(--text-primary);
+            font-size: 1rem;
+            outline: none;
+            transition: all 0.3s ease;
+            font-family: 'Inter', sans-serif;
+        }
+        
+        .form-group input:focus,
+        .form-group textarea:focus {
+            border-color: var(--accent-green);
+            box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.1);
+        }
+        
+        /* Preview Screen */
+        .preview-section {
+            margin-bottom: 3rem;
+        }
+        
+        .preview-toggle {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        
+        .preview-toggle button {
+            background: var(--bg-secondary);
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            padding: 0.75rem 1.5rem;
+            color: var(--text-primary);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+        
+        .preview-toggle button.active {
+            background: var(--accent-green);
+            border-color: var(--accent-green);
+            color: var(--bg-primary);
+        }
+        
+        .browser-mockup {
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            border: 2px solid var(--border);
+            overflow: hidden;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow);
+        }
+        
+        .browser-header {
+            background: var(--bg-primary);
+            padding: 0.75rem 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .browser-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+        
+        .browser-dot:nth-child(1) { background: #ff5f56; }
+        .browser-dot:nth-child(2) { background: #ffbd2e; }
+        .browser-dot:nth-child(3) { background: #27ca3f; }
+        
+        .browser-url {
+            background: var(--bg-secondary);
+            border-radius: 6px;
+            padding: 0.25rem 0.75rem;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-left: auto;
+            max-width: 200px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        .template-preview {
+            display: none;
+            min-height: 600px;
+        }
+        
+        .template-preview.active {
+            display: block;
+        }
+        
+        /* Purchase Section */
+        .purchase-section {
+            background: var(--bg-card);
+            border: 2px solid var(--accent-green);
+            border-radius: 20px;
+            padding: 3rem;
+            text-align: center;
+            margin-bottom: 3rem;
+            box-shadow: 0 20px 60px rgba(34, 197, 94, 0.2);
+        }
+        
+        .purchase-section h3 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, var(--accent-green), var(--accent-neon));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .purchase-section p {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+        }
+        
+        .purchase-btn {
+            background: linear-gradient(135deg, var(--accent-green), var(--accent-neon));
+            border: none;
+            border-radius: 12px;
+            padding: 1.5rem 3rem;
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 600;
+            font-size: 1.3rem;
+            color: var(--bg-primary);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            margin-bottom: 1.5rem;
+        }
+        
+        .purchase-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 40px rgba(34, 197, 94, 0.4);
+        }
+        
+        .purchase-features {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+        
+        .purchase-features span {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        /* Template Styles */
+        
+        /* Modern & Clean Template */
+        .template-modern {
+            font-family: 'Inter', sans-serif;
+            background: #ffffff;
+            color: #1a1a2e;
+        }
+        
+        .modern-nav {
+            background: #ffffff;
+            padding: 1rem 2rem;
+            border-bottom: 1px solid #e5e5e5;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .modern-logo {
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: #4361ee;
+        }
+        
+        .modern-nav-links {
+            display: flex;
+            gap: 2rem;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+        
+        .modern-hero {
+            background: linear-gradient(135deg, #ffffff, #f8fafc);
+            padding: 4rem 2rem;
+            text-align: center;
+        }
+        
+        .modern-hero h1 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #1a1a2e, #4361ee);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .modern-hero p {
+            font-size: 1.25rem;
+            color: #4a5568;
+            margin-bottom: 2rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .modern-cta {
+            background: #4361ee;
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            border: none;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        
+        .modern-features {
+            padding: 4rem 2rem;
+            background: #ffffff;
+        }
+        
+        .modern-features h2 {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            color: #1a1a2e;
+        }
+        
+        .modern-features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        
+        .modern-feature-card {
+            background: #f8fafc;
+            padding: 2rem;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+        }
+        
+        .modern-feature-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .modern-feature-card h4 {
+            color: #1a1a2e;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+        
+        .modern-footer {
+            background: #1a1a2e;
+            color: white;
+            padding: 2rem;
+            text-align: center;
+        }
+        
+        /* Bold & Edgy Template */
+        .template-bold {
+            font-family: 'Space Grotesk', sans-serif;
+            background: #0a0a0a;
+            color: #ffffff;
+        }
+        
+        .bold-nav {
+            background: #0a0a0a;
+            padding: 1rem 2rem;
+            border-bottom: 1px solid #333;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .bold-logo {
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: #ff6b35;
+        }
+        
+        .bold-nav-links {
+            display: flex;
+            gap: 2rem;
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: #ffffff;
+        }
+        
+        .bold-hero {
+            background: linear-gradient(135deg, #0a0a0a, #1a1a1a);
+            padding: 4rem 2rem;
+            text-align: center;
+            position: relative;
+        }
+        
+        .bold-hero h1 {
+            font-size: 4rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: #ffffff;
+            text-shadow: 0 0 20px rgba(255, 107, 53, 0.5);
+        }
+        
+        .bold-hero p {
+            font-size: 1.25rem;
+            color: #a1a1aa;
+            margin-bottom: 2rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .bold-cta {
+            background: linear-gradient(135deg, #ff6b35, #00ff88);
+            color: #000;
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            border: none;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+        }
+        
+        .bold-stats {
+            background: #1a1a1a;
+            padding: 2rem;
+            display: flex;
+            justify-content: center;
+            gap: 4rem;
+        }
+        
+        .bold-stat {
+            text-align: center;
+        }
+        
+        .bold-stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #ff6b35;
+        }
+        
+        .bold-services {
+            padding: 4rem 2rem;
+            background: #0a0a0a;
+        }
+        
+        .bold-services h2 {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            color: #ffffff;
+        }
+        
+        .bold-services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        
+        .bold-service-card {
+            background: #1a1a1a;
+            padding: 2rem;
+            border-radius: 12px;
+            border: 2px solid #333;
+            text-align: center;
+        }
+        
+        .bold-service-card:hover {
+            border-color: #ff6b35;
+        }
+        
+        .bold-service-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .bold-service-card h4 {
+            color: #ff6b35;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+        
+        .bold-footer {
+            background: #1a1a1a;
+            color: #a1a1aa;
+            padding: 2rem;
+            text-align: center;
+        }
+        
+        /* Warm & Friendly Template */
+        .template-warm {
+            font-family: 'DM Sans', sans-serif;
+            background: #faf7f2;
+            color: #2d5016;
+        }
+        
+        .warm-nav {
+            background: #faf7f2;
+            padding: 1rem 2rem;
+            border-bottom: 1px solid #e5e1d8;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .warm-logo {
+            font-family: 'DM Serif Display', serif;
+            font-weight: 400;
+            font-size: 1.5rem;
+            color: #2d5016;
+        }
+        
+        .warm-nav-links {
+            display: flex;
+            gap: 2rem;
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: #2d5016;
+        }
+        
+        .warm-hero {
+            background: linear-gradient(135deg, #faf7f2, #f5f1e8);
+            padding: 4rem 2rem;
+            text-align: center;
+        }
+        
+        .warm-hero h1 {
+            font-family: 'DM Serif Display', serif;
+            font-size: 3.5rem;
+            font-weight: 400;
+            margin-bottom: 1rem;
+            color: #2d5016;
+        }
+        
+        .warm-hero p {
+            font-size: 1.25rem;
+            color: #6b7d5c;
+            margin-bottom: 2rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .warm-cta {
+            background: #c4633e;
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 25px;
+            border: none;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        
+        .warm-story {
+            padding: 4rem 2rem;
+            background: #ffffff;
+            text-align: center;
+        }
+        
+        .warm-story h2 {
+            font-family: 'DM Serif Display', serif;
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            color: #2d5016;
+        }
+        
+        .warm-story p {
+            font-size: 1.1rem;
+            color: #6b7d5c;
+            max-width: 800px;
+            margin: 0 auto 2rem;
+        }
+        
+        .warm-services {
+            padding: 4rem 2rem;
+            background: #faf7f2;
+        }
+        
+        .warm-services h2 {
+            font-family: 'DM Serif Display', serif;
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            color: #2d5016;
+        }
+        
+        .warm-services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        
+        .warm-service-card {
+            background: #ffffff;
+            padding: 2rem;
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(45, 80, 22, 0.1);
+        }
+        
+        .warm-service-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .warm-service-card h4 {
+            color: #2d5016;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+        
+        .warm-testimonial {
+            background: #f5f1e8;
+            padding: 4rem 2rem;
+            text-align: center;
+        }
+        
+        .warm-testimonial blockquote {
+            font-family: 'DM Serif Display', serif;
+            font-size: 1.5rem;
+            font-style: italic;
+            margin-bottom: 1rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            color: #2d5016;
+        }
+        
+        .warm-testimonial cite {
+            color: #6b7d5c;
+            font-weight: 600;
+        }
+        
+        .warm-footer {
+            background: #2d5016;
+            color: white;
+            padding: 2rem;
+            text-align: center;
+        }
+        
+        /* Premium & Luxury Template */
+        .template-premium {
+            font-family: 'Cormorant Garamond', serif;
+            background: #000000;
+            color: #ffffff;
+        }
+        
+        .premium-nav {
+            background: #000000;
+            padding: 1.5rem 2rem;
+            border-bottom: 1px solid #c9a96e;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .premium-logo {
+            font-family: 'Playfair Display', serif;
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: #c9a96e;
+        }
+        
+        .premium-nav-links {
+            display: flex;
+            gap: 3rem;
+            font-size: 0.9rem;
+            font-weight: 400;
+            color: #ffffff;
+            letter-spacing: 1px;
+        }
+        
+        .premium-hero {
+            background: #000000;
+            padding: 6rem 2rem;
+            text-align: center;
+        }
+        
+        .premium-hero h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 4rem;
+            font-weight: 700;
+            margin-bottom: 2rem;
+            color: #ffffff;
+            letter-spacing: -1px;
+        }
+        
+        .premium-hero p {
+            font-size: 1.25rem;
+            color: #cccccc;
+            margin-bottom: 3rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            line-height: 1.8;
+        }
+        
+        .premium-cta {
+            background: transparent;
+            color: #c9a96e;
+            padding: 1rem 3rem;
+            border: 2px solid #c9a96e;
+            border-radius: 0;
+            font-size: 1rem;
+            font-weight: 400;
+            cursor: pointer;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+        
+        .premium-about {
+            padding: 6rem 2rem;
+            background: #000000;
+            text-align: center;
+        }
+        
+        .premium-about h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 3rem;
+            margin-bottom: 3rem;
+            color: #c9a96e;
+        }
+        
+        .premium-about p {
+            font-size: 1.1rem;
+            color: #cccccc;
+            max-width: 800px;
+            margin: 0 auto;
+            line-height: 1.8;
+        }
+        
+        .premium-services {
+            padding: 6rem 2rem;
+            background: #111111;
+        }
+        
+        .premium-services h2 {
+            font-family: 'Playfair Display', serif;
+            text-align: center;
+            font-size: 3rem;
+            margin-bottom: 4rem;
+            color: #c9a96e;
+        }
+        
+        .premium-services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 3rem;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        
+        .premium-service-card {
+            background: transparent;
+            padding: 3rem 2rem;
+            border: 1px solid #c9a96e;
+            text-align: center;
+        }
+        
+        .premium-service-card h4 {
+            font-family: 'Playfair Display', serif;
+            color: #c9a96e;
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+        
+        .premium-service-card p {
+            color: #cccccc;
+            line-height: 1.6;
+        }
+        
+        .premium-footer {
+            background: #000000;
+            color: #c9a96e;
+            padding: 3rem 2rem;
+            text-align: center;
+            border-top: 1px solid #c9a96e;
+        }
+        
+        /* Fun & Playful Template */
+        .template-fun {
+            font-family: 'Outfit', sans-serif;
+            background: #ffffff;
+            color: #2d3748;
+        }
+        
+        .fun-nav {
+            background: linear-gradient(135deg, #FF6B6B, #FFE66D);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .fun-logo {
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: #ffffff;
+        }
+        
+        .fun-nav-links {
+            display: flex;
+            gap: 2rem;
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: #ffffff;
+        }
+        
+        .fun-hero {
+            background: linear-gradient(135deg, #FF6B6B, #FFE66D, #A855F7);
+            padding: 4rem 2rem;
+            text-align: center;
+            color: #ffffff;
+        }
+        
+        .fun-hero h1 {
+            font-size: 4rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: #ffffff;
+        }
+        
+        .fun-hero p {
+            font-size: 1.25rem;
+            margin-bottom: 2rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            opacity: 0.9;
+        }
+        
+        .fun-cta {
+            background: #ffffff;
+            color: #A855F7;
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            border: none;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+        }
+        
+        .fun-features {
+            padding: 4rem 2rem;
+            background: #ffffff;
+        }
+        
+        .fun-features h2 {
+            text-align: center;
+            font-size: 3rem;
+            margin-bottom: 3rem;
+            color: #FF6B6B;
+        }
+        
+        .fun-features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        
+        .fun-feature-card {
+            background: linear-gradient(135deg, #FFF5F5, #FFFBEB, #FAF5FF);
+            padding: 2rem;
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: 0 8px 32px rgba(255, 107, 107, 0.1);
+        }
+        
+        .fun-feature-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+        
+        .fun-feature-card h4 {
+            color: #A855F7;
+            margin-bottom: 0.5rem;
+            font-weight: 700;
+        }
+        
+        .fun-about {
+            padding: 4rem 2rem;
+            background: linear-gradient(135deg, #FFF5F5, #FFFBEB);
+            text-align: center;
+        }
+        
+        .fun-about h2 {
+            font-size: 3rem;
+            margin-bottom: 2rem;
+            color: #FF6B6B;
+        }
+        
+        .fun-about p {
+            font-size: 1.1rem;
+            color: #4a5568;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .fun-footer {
+            background: linear-gradient(135deg, #FF6B6B, #A855F7);
+            color: white;
+            padding: 2rem;
+            text-align: center;
+        }
+        
+        @media (max-width: 768px) {
+            .title, .factory-title {
+                font-size: 2.5rem;
+            }
+            
+            .url-input-container {
+                flex-direction: column;
+            }
+            
+            .scores-grid {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+            
+            .ctas {
+                flex-direction: column;
+            }
+            
+            .strategy-toggle {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .vibe-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .purchase-features {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .preview-toggle {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+            
+            .modern-hero h1, .bold-hero h1, .warm-hero h1, .premium-hero h1, .fun-hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .modern-nav, .bold-nav, .warm-nav, .premium-nav, .fun-nav {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .modern-nav-links, .bold-nav-links, .warm-nav-links, .premium-nav-links, .fun-nav-links {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .bold-stats {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .premium-services-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- WEBSITE ROASTER PAGE (PRESERVED) -->
+        <div id="roasterPage" class="page active">
+            <header class="header">
+                <h1 class="title">Website Roaster 🔥</h1>
+                <p class="subtitle">Paste your URL. Get roasted. Get better.</p>
+            </header>
+            
+            <div class="input-section">
+                <div class="url-input-container">
+                    <input type="url" class="url-input" id="urlInput" placeholder="https://yourwebsite.com" required>
+                    <button class="roast-btn" id="roastBtn" onclick="startRoasting()">ROAST IT 🔥</button>
+                </div>
+                <p class="example-text">Try: google.com, apple.com, or your own site</p>
+            </div>
+            
+            <div class="loading" id="loadingSection">
+                <div class="loading-spinner"></div>
+                <div class="loading-text" id="loadingText">🔥 Analyzing your website...</div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+                <div class="loading-steps" id="loadingSteps">
+                    <div>Running Google PageSpeed analysis...</div>
+                </div>
+            </div>
+            
+            <div class="error-section" id="errorSection">
+                <div class="error-emoji">💥</div>
+                <div class="error-title" id="errorTitle">Oops! Something went wrong</div>
+                <div class="error-message" id="errorMessage">We couldn't analyze your website. Please check the URL and try again.</div>
+                <button class="roast-btn" onclick="hideError()">Try Again 🔥</button>
+            </div>
+            
+            <div class="results" id="resultsSection">
+                <div class="results-header">
+                    <h2 class="roasted-url" id="roastedUrl"></h2>
+                    <p class="overall-verdict" id="overallVerdict"></p>
+                    
+                    <div class="strategy-toggle">
+                        <button class="strategy-btn active" onclick="showStrategy('mobile')" id="mobileBtn">📱 Mobile</button>
+                        <button class="strategy-btn" onclick="showStrategy('desktop')" id="desktopBtn">💻 Desktop</button>
+                    </div>
+                </div>
+                
+                <div class="scores-grid" id="scoresGrid">
+                    <!-- Scores will be populated by JS -->
+                </div>
+                
+                <div class="core-vitals" id="coreVitals">
+                    <h3>⚡ Core Web Vitals</h3>
+                    <div id="vitalsContent">
+                        <!-- Core Web Vitals will be populated by JS -->
+                    </div>
+                </div>
+                
+                <div class="detailed-roast">
+                    <h3>🔥 The Full Roast</h3>
+                    <div class="roast-text" id="roastText"></div>
+                </div>
+                
+                <div class="recommendations" id="recommendationsSection">
+                    <h3>💡 How to Fix This Mess</h3>
+                    <div id="recommendationsContent">
+                        <!-- Recommendations will be populated by JS -->
+                    </div>
+                </div>
+                
+                <div class="ctas">
+                    <button class="cta-btn cta-primary" onclick="startFactoryFlow()">
+                        ✨ Get Your Site Built
+                    </button>
+                    <button class="cta-btn cta-secondary" onclick="startRoasting()">
+                        🔥 Roast Another Site
+                    </button>
+                </div>
+                
+                <div class="share-section">
+                    <button class="share-btn" onclick="shareRoast()">
+                        📤 Share Your Roast
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- NEW WEBSITE FACTORY FLOW -->
+        
+        <!-- Screen 1: Vibe Selection -->
+        <div id="vibeSelectionPage" class="page">
+            <button class="back-btn" onclick="showPage('roasterPage')">← Back to Roaster</button>
+            
+            <header class="header">
+                <h1 class="factory-title">WHAT'S YOUR VIBE?</h1>
+                <p class="factory-subtitle">Pick a style. We'll do the rest.</p>
+            </header>
+            
+            <div class="vibe-grid">
+                <div class="vibe-card" onclick="selectVibe('modern')">
+                    <span class="vibe-emoji">✨</span>
+                    <h3 class="vibe-name">Modern & Clean</h3>
+                    <p class="vibe-description">Minimal. Sleek. Professional.</p>
+                </div>
+                
+                <div class="vibe-card" onclick="selectVibe('bold')">
+                    <span class="vibe-emoji">🔥</span>
+                    <h3 class="vibe-name">Bold & Edgy</h3>
+                    <p class="vibe-description">Dark. Powerful. Stand out.</p>
+                </div>
+                
+                <div class="vibe-card" onclick="selectVibe('warm')">
+                    <span class="vibe-emoji">🌿</span>
+                    <h3 class="vibe-name">Warm & Friendly</h3>
+                    <p class="vibe-description">Inviting. Natural. Trustworthy.</p>
+                </div>
+                
+                <div class="vibe-card" onclick="selectVibe('premium')">
+                    <span class="vibe-emoji">👑</span>
+                    <h3 class="vibe-name">Premium & Luxury</h3>
+                    <p class="vibe-description">Elegant. Exclusive. High-end.</p>
+                </div>
+                
+                <div class="vibe-card" onclick="selectVibe('fun')">
+                    <span class="vibe-emoji">🎨</span>
+                    <h3 class="vibe-name">Fun & Playful</h3>
+                    <p class="vibe-description">Colorful. Energetic. Creative.</p>
+                </div>
+            </div>
+            
+            <button class="next-btn" id="vibeNextBtn" onclick="showPage('quickInfoPage')">
+                CONTINUE →
+            </button>
+        </div>
+        
+        <!-- Screen 2: Quick Info -->
+        <div id="quickInfoPage" class="page">
+            <button class="back-btn" onclick="showPage('vibeSelectionPage')">← Back</button>
+            
+            <header class="header">
+                <h1 class="factory-title">Almost there!</h1>
+                <p class="factory-subtitle">Tell us about your business.</p>
+            </header>
+            
+            <form class="quick-form" id="quickInfoForm">
+                <div class="form-group">
+                    <label for="businessName">What's your business name?</label>
+                    <input type="text" id="businessName" placeholder="Your Business Name" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="businessDescription">What do you do in one sentence?</label>
+                    <input type="text" id="businessDescription" placeholder="We help..." required>
+                </div>
+                
+                <button type="submit" class="next-btn active">
+                    SHOW ME MY SITE →
+                </button>
+            </form>
+        </div>
+        
+        <!-- Screen 3: The Preview -->
+        <div id="previewPage" class="page">
+            <button class="back-btn" onclick="showPage('quickInfoPage')">← Back</button>
+            
+            <header class="header">
+                <h1 class="factory-title">Your New Website ✨</h1>
+                <p class="factory-subtitle">Here's what your site will look like</p>
+            </header>
+            
+            <div class="preview-section">
+                <div class="preview-toggle">
+                    <button class="active" onclick="togglePreview('desktop')">🖥️ Desktop</button>
+                    <button onclick="togglePreview('mobile')">📱 Mobile</button>
+                </div>
+                
+                <div class="browser-mockup">
+                    <div class="browser-header">
+                        <div class="browser-dot"></div>
+                        <div class="browser-dot"></div>
+                        <div class="browser-dot"></div>
+                        <div class="browser-url" id="previewUrl">yoursite.com</div>
+                    </div>
+                    
+                    <!-- Modern Template -->
+                    <div class="template-preview template-modern active" id="template-modern">
+                        <div class="modern-nav">
+                            <div class="modern-logo" id="modern-logo">Business</div>
+                            <div class="modern-nav-links">Home • About • Services • Contact</div>
+                        </div>
+                        <div class="modern-hero">
+                            <h1 id="modern-headline">Your Business Name</h1>
+                            <p id="modern-subtitle">We help businesses succeed</p>
+                            <button class="modern-cta">Get Started Today</button>
+                        </div>
+                        <div class="modern-features">
+                            <h2>Why Choose Us</h2>
+                            <div class="modern-features-grid">
+                                <div class="modern-feature-card">
+                                    <div class="modern-feature-icon">⚡</div>
+                                    <h4>Fast & Reliable</h4>
+                                    <p>Lightning-fast performance for your customers</p>
+                                </div>
+                                <div class="modern-feature-card">
+                                    <div class="modern-feature-icon">🎯</div>
+                                    <h4>Results-Driven</h4>
+                                    <p>Built to convert visitors into customers</p>
+                                </div>
+                                <div class="modern-feature-card">
+                                    <div class="modern-feature-icon">📱</div>
+                                    <h4>Mobile-First</h4>
+                                    <p>Perfect experience on any device</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modern-footer">
+                            <p>&copy; 2024 Your Business. All rights reserved.</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Bold Template -->
+                    <div class="template-preview template-bold" id="template-bold">
+                        <div class="bold-nav">
+                            <div class="bold-logo" id="bold-logo">Business</div>
+                            <div class="bold-nav-links">Home • About • Services • Contact</div>
+                        </div>
+                        <div class="bold-hero">
+                            <h1 id="bold-headline">YOUR BUSINESS NAME</h1>
+                            <p id="bold-subtitle">We help businesses succeed</p>
+                            <button class="bold-cta">GET STARTED</button>
+                        </div>
+                        <div class="bold-stats">
+                            <div class="bold-stat">
+                                <div class="bold-stat-number">500+</div>
+                                <div>Clients</div>
+                            </div>
+                            <div class="bold-stat">
+                                <div class="bold-stat-number">99%</div>
+                                <div>Success Rate</div>
+                            </div>
+                            <div class="bold-stat">
+                                <div class="bold-stat-number">24/7</div>
+                                <div>Support</div>
+                            </div>
+                        </div>
+                        <div class="bold-services">
+                            <h2>Our Services</h2>
+                            <div class="bold-services-grid">
+                                <div class="bold-service-card">
+                                    <div class="bold-service-icon">⚡</div>
+                                    <h4>Fast Delivery</h4>
+                                    <p>Quick and efficient solutions</p>
+                                </div>
+                                <div class="bold-service-card">
+                                    <div class="bold-service-icon">🎯</div>
+                                    <h4>Precision</h4>
+                                    <p>Targeted approach to your goals</p>
+                                </div>
+                                <div class="bold-service-card">
+                                    <div class="bold-service-icon">🚀</div>
+                                    <h4>Growth</h4>
+                                    <p>Scale your business effectively</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bold-footer">
+                            <p>&copy; 2024 Your Business. All rights reserved.</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Warm Template -->
+                    <div class="template-preview template-warm" id="template-warm">
+                        <div class="warm-nav">
+                            <div class="warm-logo" id="warm-logo">Business</div>
+                            <div class="warm-nav-links">Home • About • Services • Contact</div>
+                        </div>
+                        <div class="warm-hero">
+                            <h1 id="warm-headline">Your Business Name</h1>
+                            <p id="warm-subtitle">We help businesses succeed</p>
+                            <button class="warm-cta">Start Your Journey</button>
+                        </div>
+                        <div class="warm-story">
+                            <h2>Our Story</h2>
+                            <p>We believe in creating meaningful connections and delivering exceptional value to every client we serve.</p>
+                        </div>
+                        <div class="warm-services">
+                            <h2>What We Offer</h2>
+                            <div class="warm-services-grid">
+                                <div class="warm-service-card">
+                                    <div class="warm-service-icon">🌱</div>
+                                    <h4>Growth</h4>
+                                    <p>Nurture your business potential</p>
+                                </div>
+                                <div class="warm-service-card">
+                                    <div class="warm-service-icon">🤝</div>
+                                    <h4>Partnership</h4>
+                                    <p>Building lasting relationships</p>
+                                </div>
+                                <div class="warm-service-card">
+                                    <div class="warm-service-icon">💖</div>
+                                    <h4>Care</h4>
+                                    <p>Personal attention to your needs</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="warm-testimonial">
+                            <blockquote>"This team truly cares about our success. Exceptional service and results."</blockquote>
+                            <cite>— Happy Customer</cite>
+                        </div>
+                        <div class="warm-footer">
+                            <p>&copy; 2024 Your Business. All rights reserved.</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Premium Template -->
+                    <div class="template-preview template-premium" id="template-premium">
+                        <div class="premium-nav">
+                            <div class="premium-logo" id="premium-logo">Business</div>
+                            <div class="premium-nav-links">Home • About • Services • Contact</div>
+                        </div>
+                        <div class="premium-hero">
+                            <h1 id="premium-headline">Your Business Name</h1>
+                            <p id="premium-subtitle">We help businesses succeed with unparalleled expertise and dedication</p>
+                            <button class="premium-cta">Discover Excellence</button>
+                        </div>
+                        <div class="premium-about">
+                            <h2>Excellence Redefined</h2>
+                            <p>We deliver extraordinary results through meticulous attention to detail and unwavering commitment to quality.</p>
+                        </div>
+                        <div class="premium-services">
+                            <h2>Our Expertise</h2>
+                            <div class="premium-services-grid">
+                                <div class="premium-service-card">
+                                    <h4>Premium Solutions</h4>
+                                    <p>Bespoke strategies tailored to your unique requirements</p>
+                                </div>
+                                <div class="premium-service-card">
+                                    <h4>Exclusive Access</h4>
+                                    <p>Elite services available only to discerning clients</p>
+                                </div>
+                                <div class="premium-service-card">
+                                    <h4>White-Glove Service</h4>
+                                    <p>Personalized attention at every step of your journey</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="premium-footer">
+                            <p>&copy; 2024 Your Business. All rights reserved.</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Fun Template -->
+                    <div class="template-preview template-fun" id="template-fun">
+                        <div class="fun-nav">
+                            <div class="fun-logo" id="fun-logo">Business</div>
+                            <div class="fun-nav-links">Home • About • Services • Contact</div>
+                        </div>
+                        <div class="fun-hero">
+                            <h1 id="fun-headline">Your Business Name! 🎉</h1>
+                            <p id="fun-subtitle">We help businesses succeed in the most amazing way!</p>
+                            <button class="fun-cta">Let's Do This! 🚀</button>
+                        </div>
+                        <div class="fun-features">
+                            <h2>Why We're Awesome! 🌟</h2>
+                            <div class="fun-features-grid">
+                                <div class="fun-feature-card">
+                                    <div class="fun-feature-icon">🎨</div>
+                                    <h4>Creative Magic</h4>
+                                    <p>We make boring stuff exciting!</p>
+                                </div>
+                                <div class="fun-feature-card">
+                                    <div class="fun-feature-icon">⚡</div>
+                                    <h4>Super Fast</h4>
+                                    <p>Lightning-quick results that wow</p>
+                                </div>
+                                <div class="fun-feature-card">
+                                    <div class="fun-feature-icon">🎯</div>
+                                    <h4>Spot On</h4>
+                                    <p>We hit the bullseye every time</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="fun-about">
+                            <h2>Our Fun Story! 📖</h2>
+                            <p>We believe work should be joyful, results should be spectacular, and every client should feel like they're part of our awesome family!</p>
+                        </div>
+                        <div class="fun-footer">
+                            <p>&copy; 2024 Your Business. All rights reserved. Made with 💖</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="purchase-section">
+                <h3>Love it? Let's make it yours.</h3>
+                <p>Get your custom website — <strong>$495</strong></p>
+                <a href="https://buy.stripe.com/14A14m8ZA84z4be6qB6oo06" target="_blank" class="purchase-btn">
+                    Get Your Custom Website — $495
+                </a>
+                
+                <div class="purchase-features">
+                    <span>✅ Live in 48 hours</span>
+                    <span>✅ Mobile-optimized</span>
+                    <span>✅ Custom content</span>
+                    <span>✅ Hosting included</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <footer class="footer">
+        <p>Built with 🔥 by <a href="mailto:sol@executiveintelligence.ai" style="color: var(--accent-red); text-decoration: none;">Executive Intelligence</a></p>
+    </footer>
+
+    <script>
+        // Global variables
+        let currentAnalysis = null;
+        let currentStrategy = 'mobile';
+        let selectedVibe = null;
+        let factoryData = {};
+        
+        // Page Management
+        function showPage(pageId) {
+            // Hide all pages
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active');
+            });
+            
+            // Show the requested page
+            document.getElementById(pageId).classList.add('active');
+            
+            // Update URL hash for navigation
+            window.location.hash = pageId;
+            
+            // Scroll to top
+            window.scrollTo(0, 0);
+        }
+        
+        // Handle browser back/forward
+        window.addEventListener('hashchange', function() {
+            const hash = window.location.hash.substring(1);
+            if (hash && document.getElementById(hash)) {
+                showPage(hash);
+            }
+        });
+        
+        // Check for initial hash on page load
+        window.addEventListener('load', function() {
+            const hash = window.location.hash.substring(1);
+            if (hash && document.getElementById(hash)) {
+                showPage(hash);
+            }
+        });
+        
+        // ===== NEW WEBSITE FACTORY FUNCTIONS =====
+        
+        function startFactoryFlow() {
+            showPage('vibeSelectionPage');
+        }
+        
+        function selectVibe(vibe) {
+            selectedVibe = vibe;
+            
+            // Remove selected class from all vibe cards
+            document.querySelectorAll('.vibe-card').forEach(card => {
+                card.classList.remove('selected');
+            });
+            
+            // Add selected class to clicked vibe
+            event.currentTarget.classList.add('selected');
+            
+            // Enable next button
+            document.getElementById('vibeNextBtn').classList.add('active');
+        }
+        
+        function togglePreview(device) {
+            // Update button states
+            const buttons = document.querySelectorAll('.preview-toggle button');
+            buttons.forEach(btn => btn.classList.remove('active'));
+            event.currentTarget.classList.add('active');
+            
+            // For this demo, we'll just show the same content
+            // In a real implementation, you'd show mobile vs desktop layouts
+        }
+        
+        // Handle quick info form submission
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('quickInfoForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const businessName = document.getElementById('businessName').value;
+                const businessDescription = document.getElementById('businessDescription').value;
+                
+                if (!businessName || !businessDescription || !selectedVibe) {
+                    alert('Please fill out all fields and select a vibe.');
+                    return;
+                }
+                
+                factoryData = {
+                    vibe: selectedVibe,
+                    businessName: businessName,
+                    businessDescription: businessDescription
+                };
+                
+                generatePreview();
+                showPage('previewPage');
+            });
+        });
+        
+        function generatePreview() {
+            const { vibe, businessName, businessDescription } = factoryData;
+            
+            // Hide all templates
+            document.querySelectorAll('.template-preview').forEach(template => {
+                template.classList.remove('active');
+            });
+            
+            // Show selected template
+            document.getElementById(`template-${vibe}`).classList.add('active');
+            
+            // Update preview URL
+            const urlSafeBusinessName = businessName.toLowerCase().replace(/[^a-z0-9]/g, '');
+            document.getElementById('previewUrl').textContent = urlSafeBusinessName + '.com';
+            
+            // Update template content based on vibe
+            updateTemplateContent(vibe, businessName, businessDescription);
+        }
+        
+        function updateTemplateContent(vibe, businessName, businessDescription) {
+            // Update logo
+            document.getElementById(`${vibe}-logo`).textContent = businessName;
+            
+            // Update headline
+            let headline = businessName;
+            if (vibe === 'bold') {
+                headline = businessName.toUpperCase();
+            } else if (vibe === 'fun') {
+                headline = businessName + '! 🎉';
+            }
+            document.getElementById(`${vibe}-headline`).textContent = headline;
+            
+            // Update subtitle
+            let subtitle = businessDescription;
+            if (vibe === 'premium') {
+                subtitle = businessDescription + ' with unparalleled expertise and dedication';
+            } else if (vibe === 'fun') {
+                subtitle = businessDescription + ' in the most amazing way!';
+            }
+            document.getElementById(`${vibe}-subtitle`).textContent = subtitle;
+        }
+        
+        // ===== ORIGINAL ROASTER FUNCTIONS (PRESERVED) =====
+        
+        // Roast templates based on score ranges
+        const roastTemplates = {
+            performance: {
+                bad: [
+                    "Your site loads so slow I aged a year waiting. I now have a mortgage and two kids 👴",
+                    "This is genuinely the slowest website I've ever analyzed and I once tested a site hosted on a Raspberry Pi in a shed 🏚️",
+                    "Your server response time is longer than my last relationship. And that ended badly too 💀",
+                    "I started loading your site, went to make coffee, came back, coffee got cold, made another coffee. Still loading ☕☕",
+                    "NASA could launch a rocket to Mars faster than your homepage loads. I'm not exaggerating, I did the math 🚀",
+                    "Your site is so slow it qualifies for a disability parking permit 🅿️",
+                    "If your website was a restaurant, health inspectors would shut it down for making people wait this long 🍽️",
+                    "I've seen faster page loads on a fax machine. In 1994. Over dial-up. During a thunderstorm 📠"
+                ],
+                okay: [
+                    "Your site loads at the speed of someone reluctantly getting out of bed on a Monday 😴",
+                    "Not the worst I've seen, but I once analyzed a website built entirely in Flash, so the bar is underground 📊",
+                    "It loads. Eventually. Like my motivation to exercise. Technically there but nobody's impressed 🏋️",
+                    "Your performance is the website equivalent of a C- student. You'll pass. Nobody's writing home about it 📝",
+                    "Faster than a government website but slower than literally everything else. Congrats? 🏛️",
+                    "Your site runs like me after Thanksgiving dinner — technically moving but clearly struggling 🦃",
+                    "Loading speed that says 'I care about my users' but whispers 'just not that much' 💔"
+                ],
+                good: [
+                    "OK I'll shut up. This is actually fast. I hate giving compliments but you earned it ⚡",
+                    "Your site loads so fast I thought my browser was broken. Then I realized you're just competent. Rare these days 🦄",
+                    "Performance so good I'm checking if you work at Google. Do you work at Google? 🤔",
+                    "Sub-second load time. You're either a genius or you hired one. Either way, respect 🫡",
+                    "This loads faster than I can think of an insult. And I'm VERY good at insults 💨"
+                ]
+            },
+            seo: {
+                bad: [
+                    "Google doesn't know you exist. You're not even on page 10. You're in the shadow realm 👻",
+                    "I searched for your site on Google and it suggested therapy instead 🛋️",
+                    "Your SEO is so bad that if someone googled your exact domain name, they'd still find your competitor first 💀",
+                    "You have zero meta descriptions. That's like going to a job interview naked and wondering why you didn't get called back 👔",
+                    "Your SEO strategy appears to be 'hope and prayer.' Bold move. Hasn't worked yet 🙏",
+                    "Search engines treat your site like a restraining order — they actively avoid it 🚫",
+                    "I've seen better SEO on a 404 page. Actually, I'm not kidding. A literal error page 📄",
+                    "Your site is invisible to Google. Congrats, you've achieved the digital equivalent of witness protection 🕵️"
+                ],
+                okay: [
+                    "Google acknowledges you exist. You're like that guy at the party nobody remembers the name of 🥳",
+                    "Your SEO is the website equivalent of 'nice personality' — damning with faint praise 😬",
+                    "You have meta tags. Some of them even make sense. I'm grading on a curve here 📐",
+                    "SEO that screams 'I watched one YouTube tutorial and called it a day' 🎥",
+                    "You're ranking on page 4 of Google. Also known as 'the page where dreams go to die' 💀",
+                    "Your keyword strategy is like a horoscope — vague enough to apply to literally anything ♒",
+                    "Search visibility: you're the Where's Waldo of the internet, except nobody's looking 🔍"
+                ],
+                good: [
+                    "Your SEO is... actually good? I need a moment. This doesn't happen often 😮",
+                    "Meta tags, schema markup, semantic HTML — you either hired someone who knows what they're doing or you ARE that person 🎯",
+                    "Google loves you so much they might name a conference room after you 🏢",
+                    "SEO this clean makes me suspicious you're an AI. Are you an AI? Takes one to know one 🤖",
+                    "Structured data, proper headings, alt text on images — you absolute nerd. I love it 🤓"
+                ]
+            },
+            accessibility: {
+                bad: [
+                    "Your accessibility score is a hate crime against screen readers 🔇",
+                    "If your website was a building, it would have stairs to the wheelchair ramp 🏗️",
+                    "You've somehow made the internet LESS accessible. That takes effort. Negative effort, but effort 💪",
+                    "Screen readers tried to parse your site and filed for workers' comp 📋",
+                    "Your color contrast is so bad I need to schedule an eye exam after reviewing this 👁️",
+                    "ADA lawyers are salivating right now. This is lawsuit bait and you don't even know it ⚖️",
+                    "Your site excludes more people than an invite-only nightclub with a dress code 🚪",
+                    "Congrats, you've built a website that discriminates against humans. All of them 🤦"
+                ],
+                okay: [
+                    "Some accessibility. Like putting a ramp next to stairs but making it out of sandpaper 🪵",
+                    "You remembered alt text exists! You forgot to actually write anything useful in it, but baby steps 👶",
+                    "Accessibility that says 'our legal team made us do this' rather than 'we care about people' 📎",
+                    "Half-accessible. Like a swimming pool with a shallow end but no water in it 🏊",
+                    "You tried. That counts for something. Not much, but something 🏅",
+                    "Your accessibility is like my cooking — technically edible but nobody's asking for seconds 🍳"
+                ],
+                good: [
+                    "Accessible AND well-designed? What kind of sorcery is this? 🧙",
+                    "Your accessibility is so good it made me feel things. Specifically, hope for the internet 🥲",
+                    "ARIA labels, proper headings, keyboard navigation — you beautiful human being 💖",
+                    "This is how the internet should work. For everyone. You get it 🌍",
+                    "Screen readers are singing your praises. Literally. They have good things to say about you 🎵"
+                ]
+            },
+            bestPractices: {
+                bad: [
+                    "Your code has more red flags than a Soviet parade 🚩🚩🚩",
+                    "I found security vulnerabilities that would make a hacker blush. And they've seen some things 💀",
+                    "Your HTTPS certificate is either expired or nonexistent. You're basically running a lemonade stand with a 'trust me bro' sign 🍋",
+                    "Best practices? You're following WORST practices. Impressively consistently too 📉",
+                    "Your website is one script kiddie away from being someone else's website 🎭",
+                    "I found console errors that tell a story. A horror story 📖",
+                    "Your code is so insecure I feel uncomfortable even analyzing it. Like I'm an accomplice 🏃",
+                    "Mixed content warnings, deprecated APIs, no CSP headers — it's like a bingo card of everything NOT to do 🎰"
+                ],
+                okay: [
+                    "Some best practices followed, some aggressively ignored. Like a health nut who smokes 🚬",
+                    "Your security is like a screen door on a submarine — it's there, but what's the point? 🚢",
+                    "You pass enough checks to not get hacked TODAY. Tomorrow? No promises 📅",
+                    "Best practices score that says 'I copy-pasted from Stack Overflow and it worked' 💻",
+                    "Your code quality is mid. And I don't mean that in the Gen Z compliment way 🫤",
+                    "Following best practices like I follow speed limits — loosely and only when someone's watching 🚗"
+                ],
+                good: [
+                    "Clean code, proper security headers, no console errors — who ARE you? 🕴️",
+                    "Best practices so tight even I can't find something to roast. And I'm TRYING 😤",
+                    "Your security posture is genuinely impressive. My roasting algorithm is struggling here 🤖",
+                    "HTTPS, CSP headers, no mixed content — this is textbook. Literally could be in a textbook 📚",
+                    "You follow best practices so well it's almost suspicious. Are you hiding something? 🕵️"
+                ]
+            }
+        };
+        
+        function getScoreCategory(score) {
+            if (score < 0.5) return 'bad';
+            if (score < 0.8) return 'okay';
+            return 'good';
+        }
+        
+        function generateRoastComment(category, score) {
+            const scoreCategory = getScoreCategory(score);
+            const templates = roastTemplates[category] || roastTemplates.performance;
+            const comments = templates[scoreCategory] || templates.bad;
+            return comments[Math.floor(Math.random() * comments.length)];
+        }
+        
+        function formatValue(value, unit = '') {
+            if (typeof value === 'number') {
+                return Math.round(value * 100) / 100 + unit;
+            }
+            return value || 'N/A';
+        }
+        
+        function getVitalStatus(score, thresholds) {
+            if (!score || !thresholds) return 'fail';
+            if (score <= thresholds.good) return 'pass';
+            if (score <= thresholds.needs_improvement) return 'warning';
+            return 'fail';
+        }
+        
+        function validateUrl(url) {
+            try {
+                if (!url.startsWith('http://') && !url.startsWith('https://')) {
+                    url = 'https://' + url;
+                }
+                const urlObj = new URL(url);
+                return urlObj.toString();
+            } catch {
+                return null;
+            }
+        }
+        
+        const PAGESPEED_API_KEY = 'AIzaSyAYKwqcEs1xhEdXyI-hI85unva8xYH_8Yk';
+        
+        async function callPageSpeedAPI(url, strategy = 'mobile', retries = 2) {
+            const keyParam = PAGESPEED_API_KEY ? `&key=${PAGESPEED_API_KEY}` : '';
+            const apiUrl = `https://www.googleapis.com/pagespeedonline/v5/runPagespeed?url=${encodeURIComponent(url)}&strategy=${strategy}&category=PERFORMANCE&category=SEO&category=ACCESSIBILITY&category=BEST_PRACTICES${keyParam}`;
+            
+            for (let attempt = 0; attempt <= retries; attempt++) {
+                try {
+                    const controller = new AbortController();
+                    const timeout = setTimeout(() => controller.abort(), 90000);
+                    const response = await fetch(apiUrl, { signal: controller.signal });
+                    clearTimeout(timeout);
+                    if (!response.ok) {
+                        if (response.status === 429 && attempt < retries) {
+                            await new Promise(r => setTimeout(r, 3000 * (attempt + 1)));
+                            continue;
+                        }
+                        if (response.status === 429) {
+                            throw new Error('QUOTA_EXCEEDED');
+                        }
+                        throw new Error(`API Error: ${response.status}`);
+                    }
+                    return await response.json();
+                } catch (error) {
+                    console.error(`PageSpeed API attempt ${attempt + 1} failed:`, error);
+                    if (attempt === retries) throw error;
+                    await new Promise(r => setTimeout(r, 2000 * (attempt + 1)));
+                }
+            }
+        }
+        
+        async function startRoasting() {
+            const urlInput = document.getElementById('urlInput');
+            const loadingSection = document.getElementById('loadingSection');
+            const resultsSection = document.getElementById('resultsSection');
+            const errorSection = document.getElementById('errorSection');
+            const roastBtn = document.getElementById('roastBtn');
+            const progressFill = document.getElementById('progressFill');
+            
+            let url = urlInput.value.trim();
+            if (!url) {
+                urlInput.focus();
+                return;
+            }
+            
+            const validatedUrl = validateUrl(url);
+            if (!validatedUrl) {
+                showError('Invalid URL', 'Please enter a valid URL (e.g., https://example.com)');
+                return;
+            }
+            
+            // Reset state
+            hideError();
+            resultsSection.classList.remove('show');
+            loadingSection.classList.add('show');
+            roastBtn.disabled = true;
+            roastBtn.textContent = 'ROASTING... 🔥';
+            
+            try {
+                // Animate progress bar
+                let progress = 0;
+                const progressInterval = setInterval(() => {
+                    progress += Math.random() * 15;
+                    if (progress > 90) progress = 90;
+                    progressFill.style.width = progress + '%';
+                }, 500);
+                
+                // Update loading text
+                document.getElementById('loadingText').textContent = '🔥 Running mobile analysis...';
+                
+                // Call API for both mobile and desktop
+                const [mobileData, desktopData] = await Promise.all([
+                    callPageSpeedAPI(validatedUrl, 'mobile'),
+                    callPageSpeedAPI(validatedUrl, 'desktop')
+                ]);
+                
+                // Complete progress
+                clearInterval(progressInterval);
+                progressFill.style.width = '100%';
+                
+                // Process results
+                currentAnalysis = {
+                    url: validatedUrl,
+                    mobile: processPageSpeedData(mobileData),
+                    desktop: processPageSpeedData(desktopData)
+                };
+                
+                // Hide loading and show results
+                setTimeout(() => {
+                    loadingSection.classList.remove('show');
+                    displayResults();
+                    resultsSection.classList.add('show');
+                }, 500);
+                
+            } catch (error) {
+                console.error('Analysis failed:', error);
+                loadingSection.classList.remove('show');
+                const errMsg = error.message === 'QUOTA_EXCEEDED'
+                    ? 'Google\'s free API quota hit the daily limit. We\'re adding a dedicated API key — try again tomorrow or contact us for a free roast at sol@executiveintelligence.ai'
+                    : error.name === 'AbortError' 
+                    ? 'The analysis timed out. Google\'s API is slow right now — try again in a few seconds.'
+                    : 'We couldn\'t analyze your website. This can happen if the site is down, very slow to load, or blocking analysis. Try again — it usually works on the second attempt.';
+                showError('Analysis Failed', errMsg);
+            } finally {
+                roastBtn.disabled = false;
+                roastBtn.textContent = 'ROAST ANOTHER 🔥';
+            }
+        }
+        
+        function processPageSpeedData(data) {
+            const lighthouse = data.lighthouseResult;
+            const categories = lighthouse.categories;
+            const audits = lighthouse.audits;
+            
+            return {
+                scores: {
+                    performance: categories.performance?.score || 0,
+                    seo: categories.seo?.score || 0,
+                    accessibility: categories.accessibility?.score || 0,
+                    bestPractices: categories['best-practices']?.score || 0
+                },
+                vitals: {
+                    fcp: audits['first-contentful-paint'],
+                    lcp: audits['largest-contentful-paint'],
+                    cls: audits['cumulative-layout-shift'],
+                    tbt: audits['total-blocking-time'],
+                    si: audits['speed-index']
+                },
+                audits: audits,
+                url: data.id
+            };
+        }
+        
+        function displayResults() {
+            const data = currentAnalysis[currentStrategy];
+            
+            // Update header
+            document.getElementById('roastedUrl').textContent = currentAnalysis.url;
+            document.getElementById('overallVerdict').textContent = generateOverallVerdict(data.scores);
+            
+            // Update scores
+            updateScoresGrid(data);
+            
+            // Update Core Web Vitals
+            updateCoreVitals(data.vitals);
+            
+            // Generate and display roast
+            const roast = generateFullRoast(data);
+            document.getElementById('roastText').textContent = roast;
+            
+            // Update recommendations
+            updateRecommendations(data);
+        }
+        
+        function updateScoresGrid(data) {
+            const scoresGrid = document.getElementById('scoresGrid');
+            const scores = data.scores;
+            
+            scoresGrid.innerHTML = `
+                <div class="score-card">
+                    <div class="score-number score-${getScoreCategory(scores.performance)}">${Math.round(scores.performance * 100)}</div>
+                    <div class="score-label">Performance ⚡</div>
+                    <div class="score-comment">${generateRoastComment('performance', scores.performance)}</div>
+                </div>
+                <div class="score-card">
+                    <div class="score-number score-${getScoreCategory(scores.seo)}">${Math.round(scores.seo * 100)}</div>
+                    <div class="score-label">SEO 🔍</div>
+                    <div class="score-comment">${generateRoastComment('seo', scores.seo)}</div>
+                </div>
+                <div class="score-card">
+                    <div class="score-number score-${getScoreCategory(scores.accessibility)}">${Math.round(scores.accessibility * 100)}</div>
+                    <div class="score-label">Accessibility ♿</div>
+                    <div class="score-comment">${generateRoastComment('accessibility', scores.accessibility)}</div>
+                </div>
+                <div class="score-card">
+                    <div class="score-number score-${getScoreCategory(scores.bestPractices)}">${Math.round(scores.bestPractices * 100)}</div>
+                    <div class="score-label">Best Practices 🛡️</div>
+                    <div class="score-comment">${generateRoastComment('bestPractices', scores.bestPractices)}</div>
+                </div>
+            `;
+        }
+        
+        function updateCoreVitals(vitals) {
+            const vitalsContent = document.getElementById('vitalsContent');
+            
+            const fcpStatus = getVitalStatus(vitals.fcp?.numericValue, {good: 1800, needs_improvement: 3000});
+            const lcpStatus = getVitalStatus(vitals.lcp?.numericValue, {good: 2500, needs_improvement: 4000});
+            const clsStatus = getVitalStatus(vitals.cls?.numericValue, {good: 0.1, needs_improvement: 0.25});
+            const tbtStatus = getVitalStatus(vitals.tbt?.numericValue, {good: 200, needs_improvement: 600});
+            
+            vitalsContent.innerHTML = `
+                <div class="vital-item">
+                    <div>
+                        <strong>First Contentful Paint</strong><br>
+                        <small>${formatValue(vitals.fcp?.displayValue || 'N/A')}</small>
+                    </div>
+                    <div class="vital-status vital-${fcpStatus}">${fcpStatus}</div>
+                </div>
+                <div class="vital-item">
+                    <div>
+                        <strong>Largest Contentful Paint</strong><br>
+                        <small>${formatValue(vitals.lcp?.displayValue || 'N/A')}</small>
+                    </div>
+                    <div class="vital-status vital-${lcpStatus}">${lcpStatus}</div>
+                </div>
+                <div class="vital-item">
+                    <div>
+                        <strong>Cumulative Layout Shift</strong><br>
+                        <small>${formatValue(vitals.cls?.displayValue || 'N/A')}</small>
+                    </div>
+                    <div class="vital-status vital-${clsStatus}">${clsStatus}</div>
+                </div>
+                <div class="vital-item">
+                    <div>
+                        <strong>Total Blocking Time</strong><br>
+                        <small>${formatValue(vitals.tbt?.displayValue || 'N/A')}</small>
+                    </div>
+                    <div class="vital-status vital-${tbtStatus}">${tbtStatus}</div>
+                </div>
+            `;
+        }
+        
+        function updateRecommendations(data) {
+            const recommendationsContent = document.getElementById('recommendationsContent');
+            const audits = data.audits;
+            
+            const failedAudits = Object.values(audits)
+                .filter(audit => audit.score !== null && audit.score < 1 && audit.details)
+                .slice(0, 5);
+            
+            if (failedAudits.length === 0) {
+                recommendationsContent.innerHTML = '<div class="recommendation-item">🎉 Great job! No major issues found.</div>';
+                return;
+            }
+            
+            const recommendationsHtml = failedAudits
+                .map(audit => `
+                    <div class="recommendation-item">
+                        <strong>${audit.title}</strong><br>
+                        <small style="color: var(--text-muted);">${audit.description || 'No description available'}</small>
+                    </div>
+                `).join('');
+            
+            recommendationsContent.innerHTML = recommendationsHtml;
+        }
+        
+        function generateOverallVerdict(scores) {
+            const average = (scores.performance + scores.seo + scores.accessibility + scores.bestPractices) / 4;
+            
+            if (average < 0.2) return "I'm calling 911. Your website is having a medical emergency 🚑";
+            if (average < 0.3) return "I've seen better websites built by accident. On GeoCities. In 1998 💀";
+            if (average < 0.4) return "Your website just made my antivirus software cry 🦠";
+            if (average < 0.5) return "Somewhere, a web developer is weeping into their keyboard because of this 😭";
+            if (average < 0.6) return "It's giving 'my nephew built this for $50' energy 👶";
+            if (average < 0.7) return "You're not terrible! You're just... aggressively average 📊";
+            if (average < 0.8) return "OK this is actually decent. I'm running out of insults 😤";
+            if (average < 0.9) return "Wait... this is actually GOOD? Let me re-run the analysis 🔄";
+            return "I literally cannot roast this. You win. I'm unemployed now 🏆";
+        }
+        
+        function generateFullRoast(data) {
+            const scores = data.scores;
+            const average = (scores.performance + scores.seo + scores.accessibility + scores.bestPractices) / 4;
+            
+            const roasts = [];
+            
+            // Performance roast
+            if (scores.performance < 0.3) {
+                roasts.push("Let's talk about your performance score. Actually, let's not — it's too painful. Your site loads slower than my grandma crossing the street, and she's been dead for 6 years. I timed your page load and my phone's screen went to sleep. TWICE. Users aren't bouncing from your site — they're aging out of your target demographic while waiting.");
+            } else if (scores.performance < 0.5) {
+                roasts.push("Your performance is what happens when someone builds a website and thinks 'eh, fast enough.' Spoiler: it's not fast enough. Your largest contentful paint takes so long that by the time it loads, the content is no longer relevant. Users have evolved. Civilizations have risen and fallen. Your hero image is still loading.");
+            } else if (scores.performance < 0.8) {
+                roasts.push("Performance is... fine. Like gas station sushi is 'fine.' Like your ex's new partner is 'fine.' It works. Nobody's excited about it. Your users aren't rage-quitting, but they're definitely not telling their friends about the blazing fast experience they had on your site.");
+            } else {
+                roasts.push("OK I'll give credit where it's due — your site is genuinely fast. Like, suspiciously fast. Did you sacrifice readability for speed? Are there any actual features on this site? Because empty pages load fast too. I kid, I kid. This is legitimately good work.");
+            }
+            
+            // SEO roast
+            if (scores.seo < 0.3) {
+                roasts.push("Your SEO is a crime scene. Google doesn't just not know you exist — Google has actively blocked your number. I searched for your exact URL on Google and it showed me a 'did you mean a completely different website?' prompt. You have all the search visibility of a message in a bottle thrown into a swimming pool.");
+            } else if (scores.seo < 0.5) {
+                roasts.push("Ah, SEO. Your meta description reads like it was written by someone who heard the word 'keywords' once at a party and went home to stuff them into every crevice. Google is aware you exist in the same way that I'm aware of the terms and conditions I never read — technically acknowledged, actively ignored.");
+            } else if (scores.seo < 0.8) {
+                roasts.push("Your SEO is mid. Not terrible. Not good. Just... there. Like background music in an elevator. Google ranks you somewhere between 'we guess this exists' and 'eh, if someone specifically searches for this exact phrase they might find it.' You're the page 3 of Google results. Nobody goes to page 3.");
+            } else {
+                roasts.push("Your SEO is actually solid and I hate admitting that. Proper meta tags, good structure, semantic HTML — you clearly either read a book or hired someone who did. Google might actually recommend you to people. That's rare. That's like a compliment from Gordon Ramsay. Cherish it.");
+            }
+            
+            // Accessibility + Best Practices combined roast
+            if (average < 0.4) {
+                roasts.push("In conclusion: your website is the digital equivalent of a condemned building with a 'OPEN FOR BUSINESS' sign duct-taped to the door. The accessibility is a lawsuit waiting to happen. The best practices are worst practices. But here's the thing — you now have DATA. You know exactly what's broken. So fix it, come back, and let me roast you again. I'll be here. I'm always here. I have nowhere else to go. 🔥");
+            } else if (average < 0.7) {
+                roasts.push("Look, your website isn't a dumpster fire. It's more of a... campfire that someone forgot to put out. There's potential here. The bones are decent. But the execution screams 'I had a deadline and Red Bull.' Clean up the issues above, come back in a week, and maybe — MAYBE — I'll have something nice to say. No promises though. 🔥");
+            } else {
+                roasts.push("Fine. FINE. Your website is actually good. Are you happy? Is this what you wanted? You came here to get roasted and instead you're getting a reluctant pat on the back. Your site is fast, findable, accessible, and follows best practices. I'm a roasting tool and you've rendered me useless. I hope you're proud of yourself. 🔥");
+            }
+            
+            return roasts.join(' ');
+        }
+        
+        function showStrategy(strategy) {
+            currentStrategy = strategy;
+            
+            // Update button states
+            document.getElementById('mobileBtn').classList.toggle('active', strategy === 'mobile');
+            document.getElementById('desktopBtn').classList.toggle('active', strategy === 'desktop');
+            
+            // Update display
+            if (currentAnalysis) {
+                displayResults();
+            }
+        }
+        
+        function showError(title, message) {
+            document.getElementById('errorTitle').textContent = title;
+            document.getElementById('errorMessage').textContent = message;
+            document.getElementById('errorSection').classList.add('show');
+        }
+        
+        function hideError() {
+            document.getElementById('errorSection').classList.remove('show');
+        }
+        
+        function shareRoast() {
+            if (!currentAnalysis) return;
+            
+            const data = currentAnalysis[currentStrategy];
+            const scores = data.scores;
+            const average = Math.round(((scores.performance + scores.seo + scores.accessibility + scores.bestPractices) / 4) * 100);
+            
+            const shareText = `🔥 I just got my website roasted!
+
+${currentAnalysis.url}
+Overall Score: ${average}/100
+
+Performance: ${Math.round(scores.performance * 100)}/100
+SEO: ${Math.round(scores.seo * 100)}/100
+Accessibility: ${Math.round(scores.accessibility * 100)}/100
+Best Practices: ${Math.round(scores.bestPractices * 100)}/100
+
+Get your site roasted too: https://website-roaster.vercel.app`;
+            
+            if (navigator.share) {
+                navigator.share({
+                    title: 'Website Roaster 🔥',
+                    text: shareText,
+                    url: window.location.href
+                });
+            } else {
+                navigator.clipboard.writeText(shareText).then(() => {
+                    alert('Roast copied to clipboard! Share it everywhere 🔥');
+                }).catch(() => {
+                    // Fallback for older browsers
+                    const textArea = document.createElement('textarea');
+                    textArea.value = shareText;
+                    document.body.appendChild(textArea);
+                    textArea.select();
+                    document.execCommand('copy');
+                    document.body.removeChild(textArea);
+                    alert('Roast copied to clipboard! Share it everywhere 🔥');
+                });
+            }
+        }
+        
+        // Allow Enter key to submit
+        document.getElementById('urlInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                startRoasting();
+            }
+        });
+        
+        // Auto-focus input
+        document.getElementById('urlInput').focus();
+    </script>
+</body>
+</html>
